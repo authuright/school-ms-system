@@ -1,19 +1,17 @@
 
 from sqlalchemy import Column, Integer,String
-from db import Base
+from ..db import Base
 
 from .BaseModel import BaseModel
 
-class UserModel(BaseModel ,Base):
+class UserModel(BaseModel,Base):
     __tablename__ = 'users'
 
     id = Column(Integer, unique=True, primary_key=True, autoincrement=True)
     __username = Column("username",String(80), unique=True, nullable=False)
-    __password = Column("password",String(120), unique=True, nullable=False)
-    first_name = Column(String(50), nullable=False)
-    last_name = Column(String(50), nullable=False)
     email = Column(String(120), nullable=False)
-    phone = Column(String(50), nullable=False)
+    __password = Column("password",String(120), unique=True, nullable=False) 
+    __confirm = Column("comfirm",String(120), unique=True, nullable=False) 
 
     def __init__(self,schema={ }):
         super().__init__()
@@ -37,4 +35,12 @@ class UserModel(BaseModel ,Base):
     @password.setter
     def password(self,password):
         self.__password = password
+
+    @property
+    def confirm(self):
+        return self.__confirm
+    
+    @password.setter
+    def confirm(self,confirm):
+        self.__confirm = confirm
 

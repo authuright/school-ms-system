@@ -8,5 +8,7 @@ class BaseModel:
     def _get_query(self):
         return self.__session.query(self.__class__)
     def get(self,id):
-        model = self._query.filter(self.__class__.id == id)
-        print(model.id, model.username)
+        return self._query.filter(self.__class__.id == id).one()
+
+    def get_all(self):
+        return self._query.all()

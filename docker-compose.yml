@@ -1,0 +1,17 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: pouk_postgres_container
+    restart: always
+    environment:
+      POSTGRES_DB: pouk_dbms
+      POSTGRES_USER: authuright
+      POSTGRES_PASSWORD: authuright
+    ports:
+      - "5432:5432"
+    networks:
+      - school_ms_system
+
+networks:
+  school_ms_system:
+    driver: bridge
