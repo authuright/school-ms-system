@@ -2,10 +2,10 @@
 
 ## Start Postgres
 
-docker-compose up -d run in background process
+change file permision
 
-## Start Python Project
+chmod +x entrypoint.sh
 
-source env/bin/activate : activate vertual enviroment
+sudo docker-compose up --force-recreate
 
-python server.py : start server
+## Start Python Project 

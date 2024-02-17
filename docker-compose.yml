@@ -1,7 +1,11 @@
+version: "3"
+
+name: school-ms-system
 services:
+
   postgres:
     image: postgres:latest
-    container_name: pouk_postgres_container
+    container_name: database
     restart: always
     environment:
       POSTGRES_DB: pouk_dbms
@@ -10,8 +14,30 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - school_ms_system
+      - school-network
+      
+  flask:
+    container_name: flask-server
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
+    environment:
+      POSTGRES_USER: authuright
+      POSTGRES_PASSWORD: authuright
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: pouk_dbms
+    networks:
+      - school-network
+    volumes:
+      - ./:/app
 
 networks:
-  school_ms_system:
+  school-network:
+    name: school-network
     driver: bridge
