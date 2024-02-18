@@ -10,8 +10,7 @@ class UserModel(BaseModel,Base):
     id = Column(Integer, unique=True, primary_key=True, autoincrement=True)
     __username = Column("username",String(80), unique=True, nullable=False)
     email = Column(String(120), nullable=False)
-    __password = Column("password",String(120), unique=True, nullable=False) 
-    __confirm = Column("comfirm",String(120), unique=True, nullable=False) 
+    __password = Column("password",String(120), unique=True, nullable=False)  
 
     def __init__(self,schema={ }):
         super().__init__()
@@ -35,12 +34,4 @@ class UserModel(BaseModel,Base):
     @password.setter
     def password(self,password):
         self.__password = password
-
-    @property
-    def confirm(self):
-        return self.__confirm
-    
-    @password.setter
-    def confirm(self,confirm):
-        self.__confirm = confirm
 

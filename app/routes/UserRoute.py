@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from ..db import session 
 from ..models import UserModel
 from ..schemas import UserSchema
@@ -15,23 +15,30 @@ def notfound():
     return render_template('admins/error-404.html')
 
 
-@user_blueprint.route('/login',methods=['GET', 'POST'])
+from sqlalchemy.orm.exc import NoResultFound
+
+@user_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
+    print("Starting Block")
+    if request.method == "POST":
         username = request.form.get('username')
-        password = request.form.get('password')
-        print(username,password)
-        users = session.query(UserModel).all() #filter all
-        print("Users",users)
-        user_schema = UserSchema()
-        user_json = user_schema.dump(users, many=True) 
-        print("Track 1 :",user_json)
-        for data in user_json:
-            user_data= {key: value for key, value in data.items()}
-            print("User :: {} , Password {}".format(user_data['username'],user_data['password']))
-            if user_data['username'] == username and user_data['password'] == password:
-                return redirect(url_for('basic'))
+        password = request.form.get('password') 
+        print("Step 1: ", username, password)
+        try:
+            user = session.query(UserModel).filter_by(username=username, password=password).first()
+            print("Step 2: ", user)
+            if user:
+                session['user_id'] = user.id
+                session['username'] = user.username
+                return redirect(url_for('dashboard.index'))
             else:
                 return redirect(url_for('user.login'))
+        except NoResultFound:
+            print("No user found with the provided credentials.")
+            return redirect(url_for('user.login'))
+        except Exception as e:
+            print("An error occurred:", e)
+            # Handle the error appropriately, such as logging it or returning an error page
+            return render_template('admins/error-404.html')
 
     return render_template('admins/login.html')

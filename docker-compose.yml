@@ -2,7 +2,6 @@ version: "3"
 
 name: school-ms-system
 services:
-
   postgres:
     image: postgres:latest
     container_name: database
@@ -15,7 +14,7 @@ services:
       - "5432:5432"
     networks:
       - school-network
-      
+
   flask:
     container_name: flask-server
     restart: always
@@ -32,6 +31,7 @@ services:
       POSTGRES_HOST: postgres
       POSTGRES_PORT: "5432"
       POSTGRES_DB: pouk_dbms
+      PYTHONDONTWRITEBYTECODE: "1"
     networks:
       - school-network
     volumes:
